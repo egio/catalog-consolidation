@@ -1,0 +1,13 @@
+# SQLite databases (generated / working copies)
+*.db
+*.sqlite
+*.sqlite3
+
+# Go build output
+*.out
+
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
