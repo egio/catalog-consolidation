@@ -5,10 +5,20 @@ A Go CLI that consolidates seller product catalogs into the supplied SQLite cata
 ## Requirements
 - Go 1.23+
 - CGO enabled and a C compiler available (required by `github.com/mattn/go-sqlite3`)
-- The supplied `catalog.db`
-- The supplied `ProductEntry.json`
+- The supplied `catalog.db` (not versioned, see below)
+- The supplied `ProductEntry.json` (included at `testdata/ProductEntry.json`)
 
 ## Run
+
+No SQLite file is versioned in this repository. Before the first run, place the
+supplied database at `testdata/catalog.db`:
+
+```bash
+mkdir -p testdata
+cp /path/to/supplied/catalog.db ./testdata/catalog.db
+```
+
+Then:
 
 ```bash
 go mod tidy
@@ -16,7 +26,10 @@ go test ./...
 go run ./cmd/catalog -db ./testdata/catalog.db -input ./testdata/ProductEntry.json
 ```
 
-**Important:** the `testdata/catalog.db` file is a working copy of the supplied database. Keep the original `catalog.db` untouched. The application runs a migration that changes `SellerProduct.SellerProductId` from INTEGER to TEXT to support the UUID strings in the input file.
+**Important:** `testdata/catalog.db` is a working copy of the supplied database.
+Keep the original `catalog.db` untouched. The application runs a migration that
+changes `SellerProduct.SellerProductId` from INTEGER to TEXT to support the UUID
+strings in the input file.
 
 ## Matching behavior
 Products are matched by normalized `(Name, Brand, Category)`. Normalization ignores case, accents, punctuation differences, and repeated whitespace. It does not translate names or perform fuzzy matching. See [docs/decisions.md](docs/decisions.md).
